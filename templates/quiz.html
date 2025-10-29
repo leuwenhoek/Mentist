@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Mentist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='quiz.css') }}">
+    <style>
+        /* Additional styles for quiz page */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+        .quiz-progress {
+            background: var(--medium-gray);
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .quiz-progress-bar {
+            background: linear-gradient(90deg, var(--light-blue), var(--primary-blue));
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-container {
+            background: var(--dark-gray);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .question {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .option {
+            background: var(--medium-gray);
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            color: var(--text-white);
+        }
+        .option:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        .option.selected {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border-color: var(--light-blue);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--text-white);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .results {
+            text-align: center;
+            padding: 2rem;
+        }
+        .score {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .interpretation {
+            font-size: 1.2rem;
+            color: var(--text-white);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .suggestions {
+            background: var(--medium-gray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+        }
+        .suggestions h3 {
+            color: var(--light-blue);
+            margin-bottom: 1rem;
+        }
+        .suggestions ul {
+            list-style: none;
+            padding: 0;
+        }
+        .suggestions li {
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+        .suggestions li::before {
+            content: '•';
+            color: var(--primary-blue);
+            position: absolute;
+            left: 0;
+        }
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 1rem;
+            }
+            .question-container {
+                padding: 1.5rem;
+            }
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-gradient)" stroke-width="2"/>
+                    <path d="M20 10 C15 10, 12 13, 12 17 C12 21, 15 24, 20 24 C25 24, 28 21, 28 17 C28 13, 25 10, 20 10" fill="url(#logo-gradient)"/>
+                    <circle cx="20" cy="28" r="2" fill="url(#logo-gradient)"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Mentist</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/mentist-bot">Mentist Bot</a></li>
+                <li><a href="/quiz" class="active">Quiz</a></li>
+                <li><a href="#experts">Experts/Docs</a></li>
+                <li><a href="#library">Library</a></li>
+                <li><a href="#team">About Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Mental Wellness Quiz</h1>
+            <p>Answer these questions honestly to assess your current mental state. This is not a diagnosis but a starting point for self-reflection.</p>
+        </div>
+
+        <div class="quiz-progress">
+            <div class="quiz-progress-bar" id="progressBar"></div>
+        </div>
+
+        <div id="quizContent">
+            <!-- Questions will be populated here -->
+        </div>
+
+        <div class="nav-buttons" id="navButtons">
+            <button class="btn btn-secondary" id="prevBtn">Previous</button>
+            <button class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "In the past week, how often have you felt anxious or worried?",
+                options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
+            },
+            {
+                question: "How would you rate your overall mood lately?",
+                options: ["Very positive", "Positive", "Neutral", "Negative", "Very negative"]
+            },
+            {
+                question: "Have you been sleeping well in the past month?",
+                options: ["Yes, every night", "Most nights", "Some nights", "Rarely", "Hardly ever"]
+            },
+            {
+                question: "How often do you feel motivated to do daily activities?",
+                options: ["Always", "Often", "Sometimes", "Rarely", "Never"]
+            },
+            {
+                question: "Do you find it easy to concentrate on tasks?",
+                options: ["Always", "Usually", "Sometimes", "Rarely", "Never"]
+            },
+            {
+                question: "How supported do you feel by your friends and family?",
+                options: ["Very supported", "Supported", "Neutral", "Somewhat unsupported", "Very unsupported"]
+            },
+            {
+                question: "In the last week, have you experienced physical symptoms like headaches or stomach issues due to stress?",
+                options: ["No", "Occasionally", "Sometimes", "Often", "Daily"]
+            },
+            {
+                question: "How often do you practice self-care activities (e.g., exercise, meditation)?",
+                options: ["Daily", "Several times a week", "Once a week", "Rarely", "Never"]
+            },
+            {
+                question: "Do you feel hopeful about the future?",
+                options: ["Very hopeful", "Hopeful", "Neutral", "Somewhat doubtful", "Not hopeful"]
+            },
+            {
+                question: "Overall, how satisfied are you with your life right now?",
+                options: ["Very satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very dissatisfied"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        const quizContent = document.getElementById('quizContent');
+        const progressBar = document.getElementById('progressBar');
+        const navButtons = document.getElementById('navButtons');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            quizContent.innerHTML = `
+                <div class="question-container">
+                    <div class="question">${currentQuestion + 1}. ${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((option, index) => `
+                            <div class="option" data-value="${index}">${option}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    answers[currentQuestion] = parseInt(option.dataset.value);
+                    updateButtons();
+                });
+            });
+
+            // Select previous answer if exists
+            if (answers[currentQuestion] !== undefined) {
+                document.querySelectorAll('.option')[answers[currentQuestion]].classList.add('selected');
+            }
+
+            updateProgress();
+            updateButtons();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function updateButtons() {
+            const hasAnswer = answers[currentQuestion] !== undefined;
+            nextBtn.disabled = !hasAnswer;
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function showResults() {
+            const score = answers.reduce((acc, val) => acc + val, 0);
+            const total = quizData.length * 4; // Max score assuming 0-4 scale
+            const percentage = (score / total) * 100;
+
+            let interpretation, color;
+            if (percentage < 25) {
+                interpretation = "Excellent mental wellness! Keep up the great work.";
+                color = "#10b981";
+            } else if (percentage < 50) {
+                interpretation = "Good job! You're doing well, but consider adding more self-care practices.";
+                color = "#f59e0b";
+            } else if (percentage < 75) {
+                interpretation = "Room for improvement. Small changes can make a big difference. Let's explore some tips.";
+                color = "#f97316";
+            } else {
+                interpretation = "It might be helpful to talk to someone. Remember, seeking support is a strength.";
+                color = "#ef4444";
+            }
+
+            quizContent.innerHTML = `
+                <div class="results">
+                    <div class="score" style="color: ${color};">${Math.round(percentage)}%</div>
+                    <div class="interpretation">${interpretation}</div>
+                    <div class="suggestions">
+                        <h3>Suggestions:</h3>
+                        <ul>
+                            <li>Practice daily mindfulness or meditation for 5-10 minutes.</li>
+                            <li>Connect with a friend or loved one this week.</li>
+                            <li>Try a short walk in nature to boost your mood.</li>
+                            <li>Journal your thoughts to process emotions.</li>
+                            <li>If needed, consider reaching out to a professional.</li>
+                        </ul>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="btn btn-primary" onclick="restartQuiz()">Take Quiz Again</button>
+                    </div>
+                </div>
+            `;
+
+            navButtons.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = [];
+            loadQuestion();
+            navButtons.style.display = 'flex';
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', nextQuestion);
+        prevBtn.addEventListener('click', prevQuestion);
+
+        // Initialize
+        loadQuestion();
+        navButtons.style.display = 'flex';
+    </script>
+</body>
+</html>
