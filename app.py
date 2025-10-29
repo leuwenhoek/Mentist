@@ -40,6 +40,10 @@ def quiz():
 def experts():
     return render_template("experts.html")
 
+@app.route("/library")
+def library():
+    return render_template("library.html")
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     data = request.json
