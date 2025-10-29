@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentist - Your Mental Health Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-gradient)" stroke-width="2"/>
+                    <path d="M20 10 C15 10, 12 13, 12 17 C12 21, 15 24, 20 24 C25 24, 28 21, 28 17 C28 13, 25 10, 20 10" fill="url(#logo-gradient)"/>
+                    <circle cx="20" cy="28" r="2" fill="url(#logo-gradient)"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Mentist</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/home" class="active">Home</a></li>
+                <li><a href="/mentist-bot">Mentist Bot</a></li>
+                <li><a href="/quiz">Quiz</a></li>
+                <li><a href="/experts">Experts/Docs</a></li>
+                <li><a href="/library">Library</a></li>
+                <li><a href="/team">About Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to <span class="gradient-text">Mentist</span></h1>
+            <p class="hero-subtitle">Your trusted companion for mental wellness and support</p>
+            <p class="hero-description">We provide comprehensive mental health resources, AI-powered support, and connections to professional experts—all in one place.</p>
+            <div class="cta-buttons">
+                <a href="/mentist-bot" class="btn btn-primary">Talk to Mentist Bot</a>
+                <a href="/quiz" class="btn btn-secondary">Take Assessment</a>
+            </div>
+        </div>
+        <div class="hero-illustration">
+            <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+                        <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.8" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0.6" />
+                        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+                    </linearGradient>
+                </defs>
+                <circle cx="250" cy="250" r="200" fill="url(#grad1)" opacity="0.3"/>
+                <circle cx="250" cy="250" r="150" fill="url(#grad2)" opacity="0.4"/>
+                <path d="M250 150 C200 150, 170 180, 170 220 C170 260, 200 290, 250 290 C300 290, 330 260, 330 220 C330 180, 300 150, 250 150" fill="url(#grad1)"/>
+                <circle cx="220" cy="210" r="10" fill="#fff"/>
+                <circle cx="280" cy="210" r="10" fill="#fff"/>
+                <path d="M220 250 Q250 270 280 250" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="12" fill="url(#icon-grad1)"/>
+                        <path d="M30 20 L35 25 L30 30 L25 25 Z M20 30 L25 35 L30 30 L25 25 Z M30 30 L35 35 L30 40 L25 35 Z M40 30 L35 35 L30 30 L35 25 Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="icon-grad1" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" style="stop-color:#3b82f6"/>
+                                <stop offset="100%" style="stop-color:#1e40af"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Mentist Bot</h3>
+                <p>An AI-powered conversational companion that provides 24/7 emotional support and encouragement whenever you need it.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="12" fill="url(#icon-grad2)"/>
+                        <circle cx="30" cy="25" r="8" stroke="white" stroke-width="2"/>
+                        <path d="M22 35 L22 42 L38 42 L38 35 C38 31 34 28 30 28 C26 28 22 31 22 35" stroke="white" stroke-width="2"/>
+                        <circle cx="20" cy="20" r="2" fill="white"/>
+                        <circle cx="40" cy="20" r="2" fill="white"/>
+                        <circle cx="15" cy="30" r="2" fill="white"/>
+                        <circle cx="45" cy="30" r="2" fill="white"/>
+                        <defs>
+                            <linearGradient id="icon-grad2" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" style="stop-color:#60a5fa"/>
+                                <stop offset="100%" style="stop-color:#3b82f6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Mental Health Assessment</h3>
+                <p>Take our comprehensive quiz to understand your mental health score and receive personalized recommendations.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="12" fill="url(#icon-grad3)"/>
+                        <path d="M30 15 L35 25 L45 25 L37 32 L40 42 L30 36 L20 42 L23 32 L15 25 L25 25 Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="icon-grad3" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" style="stop-color:#2563eb"/>
+                                <stop offset="100%" style="stop-color:#1e3a8a"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Expert Consultation</h3>
+                <p>Connect with licensed mental health professionals and doctors who can provide specialized guidance and support.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="12" fill="url(#icon-grad4)"/>
+                        <rect x="18" y="15" width="24" height="30" rx="2" stroke="white" stroke-width="2"/>
+                        <line x1="23" y1="22" x2="37" y2="22" stroke="white" stroke-width="2"/>
+                        <line x1="23" y1="28" x2="37" y2="28" stroke="white" stroke-width="2"/>
+                        <line x1="23" y1="34" x2="32" y2="34" stroke="white" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="icon-grad4" x1="0" y1="0" x2="60" y2="60">
+                                <stop offset="0%" style="stop-color:#3b82f6"/>
+                                <stop offset="100%" style="stop-color:#1e40af"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>Resource Library</h3>
+                <p>Access a curated collection of articles, guides, and tools to learn about mental health and develop healthy coping strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How Mentist Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Start Your Journey</h3>
+                <p>Begin by taking our mental health assessment or chatting with the Mentist Bot for immediate support.</p>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Get Personalized Insights</h3>
+                <p>Receive tailored recommendations and resources based on your unique needs and assessment results.</p>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Connect & Grow</h3>
+                <p>Access professional support, explore our library, and track your progress on your wellness journey.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Prioritize Your Mental Health?</h2>
+            <p>Join thousands who have found support and guidance through Mentist</p>
+            <a href="/" class="btn btn-primary btn-large">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Mentist</h4>
+                <p>Your trusted companion for mental wellness and support.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#mentist-bot">Mentist Bot</a></li>
+                    <li><a href="#quiz">Quiz</a></li>
+                    <li><a href="#experts">Experts</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#library">Library</a></li>
+                    <li><a href="#team">About Team</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Mentist. All rights reserved. Your mental health matters.</p>
+        </div>
+    </footer>
+</body>
+</html>
