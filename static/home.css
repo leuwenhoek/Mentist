@@ -491,3 +491,89 @@ body {
         padding-top: 200px;
     }
 }
+
+/* --- Team Section Styles --- */
+.team-section {
+    padding: 140px 2rem 80px; /* Adjusting for navbar and general padding */
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 80vh; /* Ensure content is visually centered on short pages */
+}
+
+.team-container {
+    text-align: center;
+}
+
+.team-intro {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    margin: -3rem auto 4rem; /* Adjust margin after section-title */
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    padding: 2rem 0;
+}
+
+.team-member-card {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+    padding: 2.5rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.team-member-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+}
+
+.member-image-placeholder {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: var(--dark-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--light-blue);
+    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
+}
+
+.member-image-placeholder svg {
+    width: 80px;
+    height: 80px;
+}
+
+.team-member-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-white);
+}
+
+.member-role {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    /* Uses the existing gradient-text class from home.css */
+}
+
+.member-bio {
+    color: var(--text-gray);
+    line-height: 1.7;
+}
+
+/* Responsive adjustments for team grid */
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
