@@ -36,6 +36,10 @@ def bot():
 def quiz():
     return render_template("quiz.html")
 
+@app.route("/experts")
+def experts():
+    return render_template("experts.html")
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     data = request.json
