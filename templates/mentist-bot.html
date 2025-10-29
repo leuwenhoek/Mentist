@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentist Bot - Your AI Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mentist-bot.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-gradient)" stroke-width="2"/>
+                    <path d="M20 10 C15 10, 12 13, 12 17 C12 21, 15 24, 20 24 C25 24, 28 21, 28 17 C28 13, 25 10, 20 10" fill="url(#logo-gradient)"/>
+                    <circle cx="20" cy="28" r="2" fill="url(#logo-gradient)"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Mentist</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/mentist-bot" class="active">Mentist Bot</a></li>
+                <li><a href="/quiz">Quiz</a></li>
+                <li><a href="/experts">Experts/Docs</a></li>
+                <li><a href="/library">Library</a></li>
+                <li><a href="/team">About Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <h3>Chat History</h3>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 4V16M4 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    New Chat
+                </button>
+            </div>
+            <div class="chat-list" id="chatList">
+                <!-- Chat history items will be added here dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="bot-avatar-large">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="url(#avatar-gradient)"/>
+                        <circle cx="38" cy="42" r="5" fill="white"/>
+                        <circle cx="62" cy="42" r="5" fill="white"/>
+                        <path d="M35 60 Q50 70 65 60" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        <defs>
+                            <linearGradient id="avatar-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#60a5fa"/>
+                                <stop offset="100%" style="stop-color:#3b82f6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>Hi, I'm Mentist Bot 👋</h1>
+                <p>Your compassionate AI companion for mental wellness. I'm here to listen, support, and encourage you.</p>
+                
+                <div class="suggestions">
+                    <h3>You can ask me about:</h3>
+                    <div class="suggestion-grid">
+                        <button class="suggestion-card" data-message="I'm feeling stressed lately">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 5 L18 11 L25 11 L20 16 L22 23 L15 19 L8 23 L10 16 L5 11 L12 11 Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span>Managing stress</span>
+                        </button>
+                        <button class="suggestion-card" data-message="I want to improve my mood">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="15" cy="15" r="12" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="11" cy="13" r="1.5" fill="currentColor"/>
+                                <circle cx="19" cy="13" r="1.5" fill="currentColor"/>
+                                <path d="M10 18 Q15 22 20 18" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            <span>Improving mood</span>
+                        </button>
+                        <button class="suggestion-card" data-message="I need motivation">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 20 L15 8 L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <line x1="12" y1="16" x2="18" y2="16" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span>Finding motivation</span>
+                        </button>
+                        <button class="suggestion-card" data-message="Tell me about mindfulness">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="15" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                                <path d="M10 18 L10 24 L20 24 L20 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>Mindfulness tips</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="attach-btn" id="attachBtn" title="Attach file">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2 L10 14 M10 14 L6 10 M10 14 L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 16 L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Type your message here... I'm listening 💙"
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 10 L18 2 L10 18 L8 11 L2 10Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="disclaimer">Mentist Bot provides support but is not a replacement for professional therapy</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const newChatBtn = document.getElementById('newChatBtn');
+        const chatList = document.getElementById('chatList');
+        const suggestionCards = document.querySelectorAll('.suggestion-card');
+
+        // State
+        let currentChatId = null;
+        let chatHistory = [];
+        let isTyping = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChatHistory();
+            setupEventListeners();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Send button click
+            sendBtn.addEventListener('click', sendMessage);
+
+            // Enter key to send (Shift+Enter for new line)
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Auto-resize textarea
+            messageInput.addEventListener('input', () => {
+                messageInput.style.height = 'auto';
+                messageInput.style.height = messageInput.scrollHeight + 'px';
+            });
+
+            // New chat button
+            newChatBtn.addEventListener('click', startNewChat);
+
+            // Suggestion cards
+            suggestionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const message = card.getAttribute('data-message');
+                    messageInput.value = message;
+                    sendMessage();
+                });
+            });
+        }
+
+        // Start New Chat
+        function startNewChat() {
+            currentChatId = generateChatId();
+            messagesContainer.innerHTML = '';
+            messageInput.value = '';
+            welcomeScreen.style.display = 'flex';
+            messagesContainer.classList.remove('active');
+        }
+
+        // Send Message
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            
+            if (!message || isTyping) return;
+
+            // Hide welcome screen and show messages
+            if (welcomeScreen.style.display !== 'none') {
+                welcomeScreen.style.display = 'none';
+                messagesContainer.classList.add('active');
+            }
+
+            // Create new chat if needed
+            if (!currentChatId) {
+                currentChatId = generateChatId();
+            }
+
+            // Display user message
+            displayMessage(message, 'user');
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Send to backend
+            try {
+                const response = await sendToBackend(message);
+                hideTypingIndicator();
+                displayMessage(response, 'bot');
+                
+                // Save to chat history
+                saveChatHistory(message, response);
+            } catch (error) {
+                hideTypingIndicator();
+                displayMessage('I apologize, but I encountered an error. Please try again.', 'bot');
+                console.error('Error:', error);
+            }
+        }
+
+        // Send to Backend - Updated to use actual Flask API
+        async function sendToBackend(message) {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    chat_id: currentChatId
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            const data = await response.json();
+            return data.response;
+        }
+
+        // Display Message
+        function displayMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            
+            if (type === 'bot') {
+                avatar.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="9" cy="10" r="1.5" fill="white"/>
+                        <circle cx="15" cy="10" r="1.5" fill="white"/>
+                        <path d="M8 14 Q12 16 16 14" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                `;
+            } else {
+                avatar.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="8" r="4" stroke="white" stroke-width="2"/>
+                        <path d="M6 18 C6 15 8 13 12 13 C16 13 18 15 18 18" stroke="white" stroke-width="2"/>
+                    </svg>
+                `;
+            }
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const messageText = document.createElement('div');
+            messageText.className = 'message-text';
+            messageText.textContent = text;
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = getCurrentTime();
+            
+            content.appendChild(messageText);
+            content.appendChild(time);
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Typing Indicator
+        function showTypingIndicator() {
+            isTyping = true;
+            sendBtn.disabled = true;
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typing-indicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="9" cy="10" r="1.5" fill="white"/>
+                        <circle cx="15" cy="10" r="1.5" fill="white"/>
+                        <path d="M8 14 Q12 16 16 14" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            isTyping = false;
+            sendBtn.disabled = false;
+            
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Chat History Management
+        function saveChatHistory(userMessage, botResponse) {
+            const chat = {
+                id: currentChatId,
+                title: userMessage.substring(0, 30) + (userMessage.length > 30 ? '...' : ''),
+                preview: botResponse.substring(0, 50) + '...',
+                time: getCurrentTime(),
+                messages: [
+                    { text: userMessage, type: 'user', time: getCurrentTime() },
+                    { text: botResponse, type: 'bot', time: getCurrentTime() }
+                ]
+            };
+            
+            // Check if chat already exists
+            const existingIndex = chatHistory.findIndex(c => c.id === currentChatId);
+            if (existingIndex !== -1) {
+                chatHistory[existingIndex].messages.push(...chat.messages);
+                chatHistory[existingIndex].preview = botResponse.substring(0, 50) + '...';
+                chatHistory[existingIndex].time = getCurrentTime();
+            } else {
+                chatHistory.unshift(chat);
+            }
+            
+            updateChatList();
+        }
+
+        function loadChatHistory() {
+            // TODO: Load from localStorage or backend
+            // For now, it's empty on page load
+            updateChatList();
+        }
+
+        function updateChatList() {
+            chatList.innerHTML = '';
+            
+            if (chatHistory.length === 0) {
+                chatList.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--text-gray); font-size: 0.9rem;">No chat history yet</div>';
+                return;
+            }
+            
+            chatHistory.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item';
+                if (chat.id === currentChatId) {
+                    chatItem.classList.add('active');
+                }
+                
+                chatItem.innerHTML = `
+                    <div class="chat-item-title">${chat.title}</div>
+                    <div class="chat-item-preview">${chat.preview}</div>
+                    <div class="chat-item-time">${chat.time}</div>
+                `;
+                
+                chatItem.addEventListener('click', () => loadChat(chat.id));
+                chatList.appendChild(chatItem);
+            });
+        }
+
+        function loadChat(chatId) {
+            const chat = chatHistory.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            currentChatId = chatId;
+            messagesContainer.innerHTML = '';
+            welcomeScreen.style.display = 'none';
+            messagesContainer.classList.add('active');
+            
+            chat.messages.forEach(msg => {
+                displayMessage(msg.text, msg.type);
+            });
+            
+            updateChatList();
+        }
+
+        // Helper Functions
+        function generateChatId() {
+            return 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Export functions for Flask integration (if needed)
+        if (typeof module !== 'undefined' && module.exports) {
+            module.exports = {
+                sendMessage,
+                displayMessage,
+                sendToBackend
+            };
+        }
+    </script>
+</body>
+</html>
