@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experts/Docs - Mentist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mentist-bot.css') }}">
+    <style>
+        /* Additional styles for experts page */
+        .experts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .experts-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .experts-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .experts-header p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .expert-card {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            cursor: pointer;
+        }
+        .expert-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        .expert-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--text-white);
+            font-size: 2rem;
+        }
+        .expert-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-blue);
+            text-align: center;
+        }
+        .expert-occupation {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .expert-experience {
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+        /* Modal Styles */
+        .expert-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--dark-gray);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .modal-header {
+            margin-bottom: 2rem;
+        }
+        .modal-header h2 {
+            color: var(--light-blue);
+            margin-bottom: 0.5rem;
+        }
+        .modal-header p {
+            color: var(--text-gray);
+        }
+        .request-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .request-btn {
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        .request-chat {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--text-white);
+        }
+        .request-call {
+            background: transparent;
+            color: var(--light-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        .request-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        /* Call Animation */
+        .call-animation {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        .ringing-circle {
+            width: 100px;
+            height: 100px;
+            border: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            position: relative;
+            animation: ring 2s linear infinite;
+        }
+        .ringing-circle::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px solid var(--light-blue);
+            border-radius: 50%;
+            animation: ring 2s linear infinite 0.5s;
+        }
+        @keyframes ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+        .ringing-text {
+            color: var(--light-blue);
+            font-size: 1.2rem;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .close-btn {
+            background: var(--medium-gray);
+            color: var(--text-white);
+            border: 1px solid var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .notification-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--text-white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .notification-popup.show {
+            transform: translateX(0);
+        }
+        @media (max-width: 768px) {
+            .experts-container {
+                padding: 1rem;
+            }
+            .experts-header h1 {
+                font-size: 2.2rem;
+            }
+            .experts-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                margin: 5% auto;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-gradient)" stroke-width="2"/>
+                    <path d="M20 10 C15 10, 12 13, 12 17 C12 21, 15 24, 20 24 C25 24, 28 21, 28 17 C28 13, 25 10, 20 10" fill="url(#logo-gradient)"/>
+                    <circle cx="20" cy="28" r="2" fill="url(#logo-gradient)"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Mentist</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/mentist-bot">Mentist Bot</a></li>
+                <li><a href="/quiz">Quiz</a></li>
+                <li><a href="/experts" class="active">Experts/Docs</a></li>
+                <li><a href="#library">Library</a></li>
+                <li><a href="#team">About Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="experts-container">
+        <div class="experts-header">
+            <h1>Our Experts</h1>
+            <p>Connect with licensed mental health professionals for personalized guidance. Select an expert to request a chat or call.</p>
+        </div>
+
+        <div class="experts-grid" id="expertsGrid">
+            <!-- Experts will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Expert Modal -->
+    <div id="expertModal" class="expert-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalExpertName"></h2>
+                <p id="modalExpertOccupation"></p>
+            </div>
+            <div class="request-buttons">
+                <button class="request-btn request-chat" id="requestChatBtn">Request Chat</button>
+                <button class="request-btn request-call" id="requestCallBtn">Request Call</button>
+            </div>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+            <!-- Call Animation -->
+            <div class="call-animation" id="callAnimation">
+                <div class="ringing-circle"></div>
+                <div class="ringing-text">Ringing...</div>
+                <button class="close-btn" onclick="closeModal()">Cancel Call</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Popup -->
+    <div id="notificationPopup" class="notification-popup">
+        We will notify you when this expert replies!
+    </div>
+
+    <script>
+        const expertsData = [
+            {
+                name: "Dr. Elena Rivera",
+                occupation: "Clinical Psychologist",
+                experience: "15+ years in cognitive behavioral therapy, specializing in anxiety and resilience building.",
+                avatar: "🧠"
+            },
+            {
+                name: "Dr. Marcus Lee",
+                occupation: "Psychiatrist",
+                experience: "20+ years in mood disorders, with a focus on lifestyle integration for emotional health.",
+                avatar: "💖"
+            },
+            {
+                name: "Dr. Aisha Patel",
+                occupation: "Mindfulness Therapist",
+                experience: "12+ years teaching stress reduction and mindfulness techniques for daily life.",
+                avatar: "🧘"
+            },
+            {
+                name: "Dr. Jordan Kim",
+                occupation: "Motivation Psychologist",
+                experience: "18+ years in goal-setting and overcoming procrastination for sustained personal growth.",
+                avatar: "⚡"
+            }
+        ];
+
+        const expertsGrid = document.getElementById('expertsGrid');
+        const modal = document.getElementById('expertModal');
+        const modalExpertName = document.getElementById('modalExpertName');
+        const modalExpertOccupation = document.getElementById('modalExpertOccupation');
+        const requestChatBtn = document.getElementById('requestChatBtn');
+        const requestCallBtn = document.getElementById('requestCallBtn');
+        const callAnimation = document.getElementById('callAnimation');
+        const notificationPopup = document.getElementById('notificationPopup');
+
+        // Populate experts grid
+        expertsData.forEach(expert => {
+            const card = document.createElement('div');
+            card.className = 'expert-card';
+            card.innerHTML = `
+                <div class="expert-avatar">${expert.avatar}</div>
+                <h3>${expert.name}</h3>
+                <div class="expert-occupation">${expert.occupation}</div>
+                <p class="expert-experience">${expert.experience}</p>
+            `;
+            card.addEventListener('click', () => openModal(expert));
+            expertsGrid.appendChild(card);
+        });
+
+        function openModal(expert) {
+            modalExpertName.textContent = expert.name;
+            modalExpertOccupation.textContent = expert.occupation;
+            modal.style.display = 'block';
+            callAnimation.style.display = 'none';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            callAnimation.style.display = 'none';
+        }
+
+        // Request Chat
+        requestChatBtn.addEventListener('click', () => {
+            showNotification();
+            closeModal();
+        });
+
+        function showNotification() {
+            notificationPopup.classList.add('show');
+            setTimeout(() => {
+                notificationPopup.classList.remove('show');
+            }, 3000);
+        }
+
+        // Request Call
+        requestCallBtn.addEventListener('click', () => {
+            callAnimation.style.display = 'block';
+        });
+
+        // Close modal on outside click
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
