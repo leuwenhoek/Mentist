@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library - Mentist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mentist-bot.css') }}">
+    <style>
+        /* Additional styles for library page */
+        .library-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .library-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .library-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .library-header p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            display: flex;
+            background: var(--medium-gray);
+            border-radius: 25px;
+            padding: 0.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .search-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-white);
+            padding: 0.75rem 1rem;
+            outline: none;
+            font-size: 1rem;
+        }
+        .search-input::placeholder {
+            color: var(--text-gray);
+        }
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border: none;
+            color: var(--text-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .category-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            color: var(--text-gray);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .category-btn.active,
+        .category-btn:hover {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--text-white);
+            border-color: var(--primary-blue);
+        }
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .resource-card {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+        .resource-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .resource-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--light-blue);
+        }
+        .resource-card p {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .resource-link {
+            display: inline-block;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .resource-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--light-blue);
+        }
+        .no-results {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            padding: 3rem;
+        }
+        @media (max-width: 768px) {
+            .library-container {
+                padding: 1rem;
+            }
+            .library-header h1 {
+                font-size: 2.2rem;
+            }
+            .categories {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logo-gradient)" stroke-width="2"/>
+                    <path d="M20 10 C15 10, 12 13, 12 17 C12 21, 15 24, 20 24 C25 24, 28 21, 28 17 C28 13, 25 10, 20 10" fill="url(#logo-gradient)"/>
+                    <circle cx="20" cy="28" r="2" fill="url(#logo-gradient)"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Mentist</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/mentist-bot">Mentist Bot</a></li>
+                <li><a href="/quiz">Quiz</a></li>
+                <li><a href="/experts">Experts/Docs</a></li>
+                <li><a href="/library" class="active">Library</a></li>
+                <li><a href="#team">About Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="library-container">
+        <div class="library-header">
+            <h1>Resource Library</h1>
+            <p>Explore a curated collection of books, articles, videos, and guides to support your mental wellness journey. All resources are selected for their evidence-based insights.</p>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search resources..." id="searchInput">
+            <button class="search-btn" onclick="searchResources()">Search</button>
+        </div>
+
+        <div class="categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="books">Books</button>
+            <button class="category-btn" data-category="articles">Articles</button>
+            <button class="category-btn" data-category="videos">Videos</button>
+            <button class="category-btn" data-category="guides">Guides</button>
+        </div>
+
+        <div class="resources-grid" id="resourcesGrid">
+            <!-- Resources will be populated dynamically -->
+        </div>
+    </div>
+
+    <script>
+        const resourcesData = [
+            {
+                title: "The Body Keeps the Score",
+                description: "A groundbreaking exploration of trauma and its effects on the body and mind, with practical recovery strategies.",
+                category: "books",
+                icon: "📖",
+                link: "https://www.amazon.com/Body-Keeps-Score-Healing-Trauma/dp/0143127748"
+            },
+            {
+                title: "Atomic Habits",
+                description: "Build lasting habits to improve mental resilience and daily well-being through small, incremental changes.",
+                category: "books",
+                icon: "📚",
+                link: "https://www.amazon.com/Atomic-Habits-Proven-Build-Break/dp/0735211299"
+            },
+            {
+                title: "How to Stop Worrying and Start Living",
+                description: "Timeless techniques for managing anxiety and living a more peaceful life.",
+                category: "books",
+                icon: "📖",
+                link: "https://www.amazon.com/How-Stop-Worrying-Start-Living/dp/0671033974"
+            },
+            {
+                title: "The Benefits of Mindfulness",
+                description: "A Harvard Health article on how mindfulness practices can reduce stress and improve focus.",
+                category: "articles",
+                icon: "📄",
+                link: "https://www.health.harvard.edu/blog/mindfulness-meditation-improves-connections-in-the-brain-201104082253"
+            },
+            {
+                title: "Understanding Depression",
+                description: "Mayo Clinic's comprehensive guide to symptoms, causes, and treatment options for depression.",
+                category: "articles",
+                icon: "📰",
+                link: "https://www.mayoclinic.org/diseases-conditions/depression/symptoms-causes/syc-20356007"
+            },
+            {
+                title: "TED Talk: All it takes is 10 mindful minutes",
+                description: "Andy Puddicombe explains the power of a few minutes of mindfulness each day.",
+                category: "videos",
+                icon: "🎥",
+                link: "https://www.ted.com/talks/andy_puddicombe_all_it_takes_is_10_mindful_minutes"
+            },
+            {
+                title: "The Power of Vulnerability",
+                description: "Brené Brown's iconic TED Talk on embracing vulnerability for stronger connections.",
+                category: "videos",
+                icon: "📹",
+                link: "https://www.ted.com/talks/brene_brown_the_power_of_vulnerability"
+            },
+            {
+                title: "Breathing Exercises for Anxiety",
+                description: "Step-by-step guide with printable worksheets for quick anxiety relief techniques.",
+                category: "guides",
+                icon: "📋",
+                link: "#"
+            },
+            {
+                title: "Gratitude Journal Template",
+                description: "A customizable PDF to track daily gratitudes and boost positive emotions.",
+                category: "guides",
+                icon: "📝",
+                link: "#"
+            }
+        ];
+
+        const resourcesGrid = document.getElementById('resourcesGrid');
+        const searchInput = document.getElementById('searchInput');
+        let currentCategory = 'all';
+
+        // Populate resources
+        function loadResources(resources) {
+            resourcesGrid.innerHTML = resources.map(resource => `
+                <div class="resource-card" data-category="${resource.category}">
+                    <div class="resource-icon">${resource.icon}</div>
+                    <h3>${resource.title}</h3>
+                    <p>${resource.description}</p>
+                    <a href="${resource.link}" class="resource-link" target="_blank">Read More</a>
+                </div>
+            `).join('');
+        }
+
+        // Initial load
+        loadResources(resourcesData);
+
+        // Category filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                filterResources();
+            });
+        });
+
+        // Search
+        function searchResources() {
+            filterResources();
+        }
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchResources();
+            }
+        });
+
+        function filterResources() {
+            const query = searchInput.value.toLowerCase();
+            let filtered = resourcesData;
+
+            // Category filter
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(r => r.category === currentCategory);
+            }
+
+            // Search filter
+            if (query) {
+                filtered = filtered.filter(r => 
+                    r.title.toLowerCase().includes(query) || 
+                    r.description.toLowerCase().includes(query)
+                );
+            }
+
+            if (filtered.length === 0) {
+                resourcesGrid.innerHTML = '<div class="no-results">No resources found. Try a different search or category.</div>';
+            } else {
+                loadResources(filtered);
+            }
+        }
+    </script>
+</body>
+</html>
