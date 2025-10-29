@@ -44,6 +44,10 @@ def experts():
 def library():
     return render_template("library.html")
 
+@app.route("/team")
+def myteam():
+    return render_template("team.html")
+    
 @app.route('/api/chat', methods=['POST'])
 def chat():
     data = request.json
